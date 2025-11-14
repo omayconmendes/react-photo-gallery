@@ -5,6 +5,8 @@ import ChevronRightIcon from "./assets/icons/chevron-right.svg?react";
 import Badge from "./components/badge.tsx";
 import Alert from "./components/alert.tsx";
 import Divider from "./components/divider.tsx";
+import InputText from "./components/input-text.tsx";
+import SeachIcon from "./assets/icons/search.svg?react";
 
 export default function App() {
 	return (
@@ -48,6 +50,10 @@ export default function App() {
 			<div>
 				<Divider />
 			</div>
+
+            <div>
+                <InputText icon={SeachIcon} placeholder={"Buscar foto"} />
+            </div>
 		</div>
 	);
 }
