@@ -7,6 +7,8 @@ import Alert from "./components/alert.tsx";
 import Divider from "./components/divider.tsx";
 import InputText from "./components/input-text.tsx";
 import SeachIcon from "./assets/icons/search.svg?react";
+import InputCheckbox from "./components/input-checkbox.tsx";
+import InputSingleFile from "./components/input-single-file.tsx";
 
 export default function App() {
 	return (
@@ -53,6 +55,14 @@ export default function App() {
 
             <div>
                 <InputText icon={SeachIcon} placeholder={"Buscar foto"} />
+            </div>
+
+            <div>
+                <InputCheckbox />
+            </div>
+
+            <div>
+                <InputSingleFile />
             </div>
 		</div>
 	);
