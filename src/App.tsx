@@ -9,9 +9,12 @@ import InputText from "./components/input-text.tsx";
 import SeachIcon from "./assets/icons/search.svg?react";
 import InputCheckbox from "./components/input-checkbox.tsx";
 import InputSingleFile from "./components/input-single-file.tsx";
+import {useForm} from "react-hook-form";
 
 export default function App() {
-	return (
+	const form = useForm();
+
+    return (
 		<div className="grid gap-7 p-6">
 			<div className="flex gap-3">
 				<Button>Button</Button>
@@ -62,7 +65,7 @@ export default function App() {
             </div>
 
             <div>
-                <InputSingleFile />
+                <InputSingleFile form={form} {...form.register("file")}/>
             </div>
 		</div>
 	);
