@@ -10,9 +10,12 @@ import SeachIcon from "./assets/icons/search.svg?react";
 import InputCheckbox from "./components/input-checkbox.tsx";
 import InputSingleFile from "./components/input-single-file.tsx";
 import {useForm} from "react-hook-form";
+import ImageFilePreview from "./components/image-file-preview.tsx";
 
 export default function App() {
 	const form = useForm();
+    const file = form.watch("file");
+    const fileSource = file?.[0] ? URL.createObjectURL(file[0]) : undefined;
 
     return (
 		<div className="grid gap-7 p-6">
@@ -65,7 +68,12 @@ export default function App() {
             </div>
 
             <div>
-                <InputSingleFile form={form} {...form.register("file")}/>
+                <InputSingleFile
+                    form={form} {...form.register("file")}
+                    allowedExtensions={['png', 'jpg', 'jpeg', 'webp']}
+                    maxFileSizeInMB={50}
+                    replaceBy={<ImageFilePreview src={fileSource} alt={"Imagem"} />}
+                />
             </div>
 		</div>
 	);
