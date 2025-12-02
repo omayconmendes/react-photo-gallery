@@ -5,11 +5,13 @@ import Skeleton from "../components/skeleton.tsx";
 import PhotosNavigator from "../contexts/photos/components/photos-navigator.tsx";
 import ImagePreview from "../components/image-preview.tsx";
 import Button from "../components/button.tsx";
+import AlbumsListSelectable from "../contexts/albums/components/albums-list-selectable.tsx";
 
 export default function PagePhotoDetails() {
 
     // Apenas para testar o mock
     const isLoadingPhoto = false;
+    ;
     const photo = {
         id: "123",
         title: "Olá, mundo!",
@@ -25,14 +27,14 @@ export default function PagePhotoDetails() {
         <Container>
             <header className={"flex items-center justify-between gap-8 mb-8"}>
                 {!isLoadingPhoto ? (
-                    <Text variant={"heading-large"}>{photo?.title}</Text>
+                    <Text as={"h2"} variant={"heading-large"}>{photo?.title}</Text>
                 ) : (
                     <Skeleton className={"w-48 h-8"}/>
                 )}
                 <PhotosNavigator loading={isLoadingPhoto} />
             </header>
 
-            <div className={"grid grid-cols-[21rem] gap-24"}>
+            <div className={"grid grid-cols-[21rem_1fr] gap-24"}>
                 <div className={"space-y-3"}>
                     {!isLoadingPhoto ? (
                         <ImagePreview src={`/images/${photo?.imageId}`} title={photo?.title} imageClassName={"h-[21rem]"} />
@@ -43,8 +45,24 @@ export default function PagePhotoDetails() {
                     {!isLoadingPhoto ? (
                         <Button variant={"destructive"}>Excluir</Button>
                     ) : (
-                        <Skeleton className={"w-20 h10"} />
+                        <Skeleton className={"w-20 h-10"} />
                     )}
+                </div>
+
+                <div className={"py-3"}>
+                    <Text as={"h3"} variant={"heading-medium"} className={"mb-6"}>
+                        Álbuns
+                    </Text>
+
+                    <AlbumsListSelectable
+                        photo={photo}
+                        albums={
+                            [
+                                {id: "456", title: "Album 1"},
+                                {id: "789", title: "Album 2"},
+                                {id: "000", title: "Album 3"}
+                            ]
+                        } loading={isLoadingPhoto} />
                 </div>
             </div>
         </Container>
