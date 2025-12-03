@@ -4,7 +4,6 @@ import Text from "../../../components/text.tsx";
 import InputCheckbox from "../../../components/input-checkbox.tsx";
 import Divider from "../../../components/divider.tsx";
 import Skeleton from "../../../components/skeleton.tsx";
-import * as string_decoder from "node:string_decoder";
 
 interface AlbumsListSelectableProps {
     loading?: boolean;
