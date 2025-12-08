@@ -13,7 +13,6 @@ import Text from "../../../components/text.tsx";
 import type {Photo} from "../../photos/models/photo.ts";
 import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.svg?react";
 import Skeleton from "../../../components/skeleton.tsx";
-import ImagePreview from "../../../components/image-preview.tsx";
 import PhotoImageSelectable from "../../photos/components/photo-image-selectable.tsx";
 
 interface AlbumNewDialogProps {
