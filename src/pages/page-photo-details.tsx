@@ -6,20 +6,26 @@ import PhotosNavigator from "../contexts/photos/components/photos-navigator.tsx"
 import ImagePreview from "../components/image-preview.tsx";
 import Button from "../components/button.tsx";
 import AlbumsListSelectable from "../contexts/albums/components/albums-list-selectable.tsx";
+import useAlbums from "../contexts/albums/hooks/use-albums.ts";
 
 export default function PagePhotoDetails() {
-
+    const {albumsList, isLoadingAlbums} = useAlbums();
     // Apenas para testar o mock
     const isLoadingPhoto = false;
-    ;
+
     const photo = {
         id: "123",
         title: "Olá, mundo!",
         imageId: "portrait-tower.png",
-        album: [
-            {id: "456", title: "Album 1"},
-            {id: "789", title: "Album 2"},
-            {id: "000", title: "Album 3"},
+        albums: [
+            {
+                id: "2a8aaf8c-afdf-4db0-9877-ac1fed91887f",
+                title: "Melhores fotos"
+            },
+            {
+                id: "9d034618-9cab-40c1-be98-036c5a7b1875",
+                title: "Viagens"
+            }
         ]
     } as Photo;
 
@@ -56,13 +62,8 @@ export default function PagePhotoDetails() {
 
                     <AlbumsListSelectable
                         photo={photo}
-                        albums={
-                            [
-                                {id: "456", title: "Album 1"},
-                                {id: "789", title: "Album 2"},
-                                {id: "000", title: "Album 3"}
-                            ]
-                        } loading={isLoadingPhoto} />
+                        loading={isLoadingAlbums}
+                        albums={albumsList} />
                 </div>
             </div>
         </Container>

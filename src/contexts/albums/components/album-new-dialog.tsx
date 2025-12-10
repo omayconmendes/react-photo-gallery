@@ -28,7 +28,7 @@ export default function AlbumNewDialog({trigger}: AlbumNewDialogProps) {
             id: "123",
             title: "Olá, mundo!",
             imageId: "portrait-tower.png",
-            album: [
+            albums: [
                 {id: "456", title: "Album 1"},
                 {id: "789", title: "Album 2"},
                 {id: "000", title: "Album 3"},

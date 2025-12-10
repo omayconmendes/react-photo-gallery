@@ -63,7 +63,6 @@ export default function InputSingleFile({ size, error, form, allowedExtensions, 
         return isValidExtension() && isValidSize();
     }
 
-    console.log(formValues, name, formFile);
     return (
         <div>
             {!formFile || !isValidFile() ? (

@@ -1,42 +1,40 @@
-import React from "react";
+import type React from "react";
 import {
-    Dialog, DialogBody,
+    Dialog,
+    DialogBody,
     DialogClose,
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTrigger
-} from "../../../components/dialog.tsx";
-import Button from "../../../components/button.tsx";
-import InputText from "../../../components/input-text.tsx";
-import Alert from "../../../components/alert.tsx";
-import InputSingleFile from "../../../components/input-single-file.tsx";
-import ImagePreview from "../../../components/image-preview.tsx";
-import Text from "../../../components/text.tsx";
+    DialogTrigger,
+} from "../../../components/dialog";
+import Button from "../../../components/button";
+import InputText from "../../../components/input-text";
+import Alert from "../../../components/alert";
+import InputSingleFile from "../../../components/input-single-file";
+import ImagePreview from "../../../components/image-preview";
+import Text from "../../../components/text";
+import Skeleton from "../../../components/skeleton";
+import { useForm } from "react-hook-form";
+import useAlbums from "../../albums/hooks/use-albums";
 import type {Album} from "../../albums/models/album.ts";
-import Skeleton from "../../../components/skeleton.tsx";
-import {useForm} from "react-hook-form";
 
 interface PhotoNewDialogProps {
-    trigger: React.ReactNode
+    trigger: React.ReactNode;
 }
 
-export default function PhotoNewDialog({trigger}: PhotoNewDialogProps) {
-    const form = useForm()
-    const isLoadingAlbum = false;
-    const albums: Album[] = [
-        {id: "456", title: "Album 1"},
-        {id: "789", title: "Album 2"},
-        {id: "000", title: "Album 3"},
-    ]
+export default function PhotoNewDialog({ trigger }: PhotoNewDialogProps) {
+    const form = useForm();
+    const { albumsList, isLoadingAlbums } = useAlbums();
 
     return (
         <Dialog>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent>
                 <DialogHeader>Adicionar foto</DialogHeader>
-                <DialogBody className={"flex flex-col gap-5"}>
-                    <InputText placeholder={"Adicione um título"} maxLength={255} />
+
+                <DialogBody className="flex flex-col gap-5">
+                    <InputText placeholder="Adicione um título" maxLength={255} />
 
                     <Alert>
                         Tamanho máximo: 50MB
@@ -48,34 +46,44 @@ export default function PhotoNewDialog({trigger}: PhotoNewDialogProps) {
                         form={form}
                         allowedExtensions={["png", "jpg", "jpeg"]}
                         maxFileSizeInMB={50}
-                        replaceBy={<ImagePreview className={"w-full h-56"} />}
+                        replaceBy={<ImagePreview className="w-full h-56" />}
                     />
 
-                    <div className={"space-y-3"}>
-                        <Text variant={"label-small"}>Selecionar álbuns</Text>
+                    <div className="space-y-3">
+                        <Text variant="label-small">Selecionar álbuns</Text>
 
-                        <div className={"flex flex-wrap gap-3"}>
-                            {!isLoadingAlbum && albums.length > 0 && albums.map((album) => (
-                                <Button key={album.id} variant={"ghost"} size={"sm"} className={"truncate"}>
-                                    {album.title}
-                                </Button>
-                            ))}
+                        <div className="flex flex-wrap gap-3">
+                            {!isLoadingAlbums &&
+                                albumsList?.length > 0 &&
+                                albumsList?.map((album: Album) => (
+                                    <Button
+                                        key={album.id}
+                                        variant="ghost"
+                                        size="sm"
+                                        className="truncate"
+                                    >
+                                        {album.title}
+                                    </Button>
+                                ))}
 
-                            {isLoadingAlbum && Array.from({length: 5}).map((_, index) => (
-                                <Skeleton key={`album-loading-${index}`} className={"w-20 h-7"} />
-                            ))}
+                            {isLoadingAlbums &&
+                                Array.from({ length: 5 }).map((_, index) => (
+                                    <Skeleton
+                                        key={`album-loading-${index}`}
+                                        className="w-20 h-7"
+                                    />
+                                ))}
                         </div>
                     </div>
                 </DialogBody>
 
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button variant={"secondary"}>Cancelar</Button>
+                        <Button variant="secondary">Cancelar</Button>
                     </DialogClose>
-
                     <Button>Adicionar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
+    );
 }

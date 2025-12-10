@@ -1,9 +1,9 @@
 import {BrowserRouter, Route, Routes} from "react-router";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import PageComponents from "./pages/page-components.tsx";
 import LayoutMain from "./pages/layout-main.tsx";
 import PageHome from "./pages/page-home.tsx";
 import PagePhotoDetails from "./pages/page-photo-details.tsx";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
