@@ -10,31 +10,17 @@ import {
 import Button from "../../../components/button.tsx";
 import InputText from "../../../components/input-text.tsx";
 import Text from "../../../components/text.tsx";
-import type {Photo} from "../../photos/models/photo.ts";
 import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.svg?react";
 import Skeleton from "../../../components/skeleton.tsx";
 import PhotoImageSelectable from "../../photos/components/photo-image-selectable.tsx";
+import usePhotos from "../../photos/hooks/use-photos.ts";
 
 interface AlbumNewDialogProps {
     trigger: React.ReactNode;
 }
 
 export default function AlbumNewDialog({trigger}: AlbumNewDialogProps) {
-
-    // TODO: Utilizar API quando estiver pronta
-    const isLoadingPhotos = false;
-    const photos: Photo[] = [
-        {
-            id: "123",
-            title: "Olá, mundo!",
-            imageId: "portrait-tower.png",
-            albums: [
-                {id: "456", title: "Album 1"},
-                {id: "789", title: "Album 2"},
-                {id: "000", title: "Album 3"},
-            ]
-        }
-    ];
+    const { photosList, isLoadingPhotos } = usePhotos();
 
     function handleTogglePhoto(selected: boolean, photoId: string) {
         console.log(selected, photoId);
@@ -52,12 +38,12 @@ export default function AlbumNewDialog({trigger}: AlbumNewDialogProps) {
                     <div className={"space-y-3"}>
                         <Text as={"div"} variant={"label-small"}>Fotos cadastradas</Text>
 
-                        {!isLoadingPhotos && photos.length > 0 && (
+                        {!isLoadingPhotos && photosList.length > 0 && (
                             <div className={"flex flex-wrap gap-2"}>
-                                {photos.map((photo) => (
+                                {photosList.map((photo) => (
                                     <PhotoImageSelectable
                                         key={photo.id}
-                                        src={`/images/${photo.imageId}`}
+                                        src={`${import.meta.env.VITE_IMAGES_URL}/${photo.imageId}`}
                                         title={photo.title}
                                         imageClassName={"w-20 h-20"}
                                         onSelectImage={(selected) => handleTogglePhoto(selected, photo.id)}
@@ -74,7 +60,7 @@ export default function AlbumNewDialog({trigger}: AlbumNewDialogProps) {
                             </div>
                         )}
 
-                        {!isLoadingPhotos && photos.length == 0 && (
+                        {!isLoadingPhotos && photosList.length == 0 && (
                             <div className={"w-full flex flex-col justify-center items-center gap-3"}>
                                 <SelectCheckboxIllustration />
                                 <Text variant={"paragraph-medium"}>

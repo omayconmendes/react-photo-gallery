@@ -2,7 +2,7 @@ import React from "react";
 import Button from "./button.tsx";
 import Container from "./container.tsx";
 import Logo from "../assets/images/galeria-plus-full-logo.svg?react";
-import {Link} from "react-router";
+import {Link, useLocation} from "react-router";
 import cx from "classnames";
 import PhotosSearch from "./photos-search.tsx";
 import Divider from "./divider.tsx";
@@ -12,14 +12,20 @@ import AlbumNewDialog from "../contexts/albums/components/album-new-dialog.tsx";
 interface MainHeaderProps extends React.ComponentProps<typeof Container> {}
 
 export default function MainHeader({className, ...props}: MainHeaderProps) {
+    const { pathname } = useLocation();
+
     return (
         <Container as={"header"} className={cx("flex justify-between items-center gap-10", className)} {...props}>
             <Link to={"/"}>
                 <Logo className={"h-5"} />
             </Link>
 
-            <PhotosSearch />
-            <Divider orientation={"vertical"} className={"h-10"} />
+            {pathname === '/' && (
+                <>
+                    <PhotosSearch />
+                    <Divider orientation={"vertical"} className={"h-10"} />
+                </>
+            )}
 
             <div className={"flex items-center gap-3"}>
                 <PhotoNewDialog trigger={<Button>Nova foto</Button>} />
