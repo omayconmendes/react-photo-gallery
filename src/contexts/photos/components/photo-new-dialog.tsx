@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import {
     Dialog,
     DialogBody,
@@ -26,20 +26,43 @@ interface PhotoNewDialogProps {
 }
 
 export default function PhotoNewDialog({ trigger }: PhotoNewDialogProps) {
+    const [modalOpen, setModalOpen] = React.useState(false);
     const form = useForm<PhotoNewFormSchema>({
         resolver: zodResolver(photoNewFormSchema)
     });
     const { albumsList, isLoadingAlbums } = useAlbums();
 
+
     const file = form.watch("file");
     const fileSource = file?.[0] ? URL.createObjectURL(file[0]) : undefined;
+
+    const albumsIds = form.watch("albumsIds");
+
+    React.useEffect(() => {
+        if ( !modalOpen ) {
+            form.reset();
+        }
+    }, [modalOpen, form]);
+
+    function handleToggleAlbum(albumId: string) {
+        const albumsIds = form.getValues("albumsIds") || [];
+        const albumsSet = new Set(albumsIds);
+
+        if ( albumsSet.has(albumId) ) {
+            albumsSet.delete(albumId)
+        } else {
+            albumsSet.add(albumId)
+        }
+
+        form.setValue("albumsIds", Array.from(albumsSet));
+    }
 
     function handleSubmit(payload: PhotoNewFormSchema) {
         console.log(payload)
     }
 
     return (
-        <Dialog>
+        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent>
                 <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -72,9 +95,10 @@ export default function PhotoNewDialog({ trigger }: PhotoNewDialogProps) {
                                 albumsList?.map((album: Album) => (
                                     <Button
                                         key={album.id}
-                                        variant="ghost"
+                                        variant={albumsIds?.includes(album.id) ? "primary" : "ghost" }
                                         size="sm"
                                         className="truncate"
+                                        onClick={() => handleToggleAlbum(album.id)}
                                     >
                                         {album.title}
                                     </Button>
