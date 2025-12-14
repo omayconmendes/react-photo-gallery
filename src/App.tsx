@@ -5,6 +5,7 @@ import LayoutMain from "./pages/layout-main.tsx";
 import PageHome from "./pages/page-home.tsx";
 import PagePhotoDetails from "./pages/page-photo-details.tsx";
 import {NuqsAdapter} from "nuqs/adapters/react-router/v7";
+import {Toaster} from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -12,6 +13,7 @@ export default function App() {
 	return (
         <QueryClientProvider client={queryClient}>
             <NuqsAdapter>
+                <Toaster position={"bottom-center"} />
                 <BrowserRouter>
                     <Routes>
                         <Route element={<LayoutMain />}>
