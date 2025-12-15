@@ -1,9 +1,11 @@
+import React from "react";
 import type {Album} from "../models/album.ts";
 import type {Photo} from "../../photos/models/photo.ts";
 import Text from "../../../components/text.tsx";
 import InputCheckbox from "../../../components/input-checkbox.tsx";
 import Divider from "../../../components/divider.tsx";
 import Skeleton from "../../../components/skeleton.tsx";
+import usePhotoAlbums from "../../photos/hooks/use-photo-albums.ts";
 
 interface AlbumsListSelectableProps {
     loading?: boolean;
@@ -13,31 +15,40 @@ interface AlbumsListSelectableProps {
 
 export default function AlbumsListSelectable({loading, photo, albums}: AlbumsListSelectableProps) {
 
+    const { managePhotoOnAlbum } = usePhotoAlbums();
+    const [isUpdatingPhoto, setIsUpdatingPhoto] = React.useTransition();
+
     function isChecked(albumId: string) {
-        return photo?.album?.some((album) => album.id === albumId);
+        return photo?.albums?.some((album) => album.id === albumId);
     }
 
-    function handledPhotoOnAlbums(albumId: string) {
+    async function handledPhotoOnAlbums(albumId: string) {
         let albumsIds = [];
 
         if (isChecked(albumId)) {
-            albumsIds = photo.album.filter((album) => album.id !== albumId).map((album) => album.id)
+            albumsIds = photo.albums.filter((album) => album.id !== albumId).map((album) => album.id)
         } else {
-            albumsIds = [...photo.album.map((album) => album.id), albumId]
+            albumsIds = [...photo.albums.map((album) => album.id), albumId]
         }
 
-        console.log('Esses são os albums que vamos enviar para o back-end: ', albumsIds);
+        setIsUpdatingPhoto(async () => {
+            await managePhotoOnAlbum(photo.id, albumsIds);
+        })
     }
 
     return (
         <ul className={"flex flex-col gap-4"}>
-            {!loading && albums?.length > 0 && albums.map((album, index) => (
+            {!loading && photo && albums?.length > 0 && albums.map((album, index) => (
                 <li key={album.id}>
                     <div className={"flex items-center justify-between gap-1"}>
                         <Text variant={"paragraph-large"} className={"truncate"}>
                             {album.title}
                         </Text>
-                        <InputCheckbox defaultChecked={isChecked(album.id)} onClick={() => handledPhotoOnAlbums(album.id)} />
+                        <InputCheckbox
+                            defaultChecked={isChecked(album.id)}
+                            onChange={() => handledPhotoOnAlbums(album.id)}
+                            disabled={isUpdatingPhoto}
+                        />
                     </div>
                     {index !== albums.length -1 && <Divider className={"mt-4"} />}
                 </li>
